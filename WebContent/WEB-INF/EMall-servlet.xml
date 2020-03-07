@@ -83,15 +83,4 @@
 		<!-- 默认必须使用数据源 -->
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
-
-	
-	<bean id="userDao" class="com.emall.user.UserDaoImpl">
-		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
-	</bean>
-
-
-	<bean id="userService" class="com.emall.user.UserServiceImpl">
-		<!-- 将id为userDao的Bean实例注入到UserService实例中 -->
-		<property name="userDao" ref="userDao"></property>
-	</bean>
 </beans>
