@@ -1,5 +1,6 @@
 package com.emall.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 public class RegisterController{
+	@Autowired
+	private UserService userService;
 	
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 	public class Response{
 		boolean success;
 		String data;
@@ -50,16 +58,14 @@ public class RegisterController{
    @ResponseBody
    public Response register(@RequestBody Account account) {
 	  Response r = new Response();
-	  r.success = true;
-	  System.out.println("/register");
+	  r.success = userService.register(account);
       return r;
    }
    
    @RequestMapping(value="/checkUserId", method=RequestMethod.GET)
    public Response checkuserId(@RequestParam String userId) {
 	  Response r = new Response();
-	  r.success = true;
-	  System.out.println("/checkUserId");
+	  r.success = userService.checkUserIdRepeated(userId);
       return r;
    }
 }

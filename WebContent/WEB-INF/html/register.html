@@ -31,7 +31,7 @@
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
 	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../js/popper.min.js"></script>
-
+	<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
 	<script>
 		function submitRegister(){
 			let userIdValid = false;
@@ -57,7 +57,7 @@
 						type : "POST",
 						data : JSON.stringify({
 							'userId':userId,
-							'password':password
+							'password':md5(password)
 						}),
 					    dataType: 'json',
 				        contentType:'application/json;charset=UTF-8',    

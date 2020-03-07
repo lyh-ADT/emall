@@ -30,4 +30,8 @@ public class Account {
 	public void setCart(String cart) {
 		this.cart = cart;
 	}
+	@Override
+	public String toString() {
+		return "Account [userId=" + userId + ", balance=" + balance + ", password=" + password + ", cart=" + cart + "]";
+	}
 }

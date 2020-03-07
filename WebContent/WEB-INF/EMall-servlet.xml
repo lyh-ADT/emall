@@ -62,4 +62,36 @@
 				type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
 		</property>
 	</bean>
+
+	<!-- 配置数据库 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<!-- 数据库驱动 -->
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver"></property>
+		<!-- 连接数据库的url -->
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/db_emall?useSSL=true&amp;serverTimezone=GMT%2B8"></property>
+		<!-- 连接数据库的用户名 -->
+		<property name="username" value="root"></property>
+		<!-- 连接数据库的密码 -->
+		<property name="password" value="liyuhang8"></property>
+	</bean>
+
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<!-- 默认必须使用数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	
+	<bean id="userDao" class="com.emall.user.UserDaoImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+
+
+	<bean id="userService" class="com.emall.user.UserServiceImpl">
+		<!-- 将id为userDao的Bean实例注入到UserService实例中 -->
+		<property name="userDao" ref="userDao"></property>
+	</bean>
 </beans>
