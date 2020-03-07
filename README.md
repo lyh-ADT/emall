@@ -28,6 +28,7 @@
 - balance
 - password
 - cart
+- uuid
 
 订单
 - orderId

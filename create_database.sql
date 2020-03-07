@@ -8,6 +8,7 @@ create table account(
 	balance 	double default 0,
 	password 	varchar(40) not null,
 	cart		text,
+	uuid		varchar(40),
 	constraint chk_balance CHECK (balance >= 0)
 );
 

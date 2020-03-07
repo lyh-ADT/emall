@@ -34,4 +34,15 @@ public class UserDaoImpl implements UserDao {
 		};
 		return jdbcTemplate.update(sql, obj) == 1;
 	}
+	
+	@Override
+	public boolean login(Account account, String uuid) {
+		String sql = "update account set uuid=? where userId=? and password=?;";
+		Object[] obj = new Object[] {
+			uuid,
+			account.getUserId(),
+			account.getPassword()
+		};
+		return jdbcTemplate.update(sql, obj) == 1;
+	}
 }
