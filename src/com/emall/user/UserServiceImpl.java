@@ -64,4 +64,15 @@ public class UserServiceImpl implements UserService {
 			return "password";
 		}
 	}
+
+	@Override
+	public Object[] getUserId(String uuid) {
+		try {
+			String userId = userDao.getUserId(uuid);
+			return new Object[] {true, userId};
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Object[] {false, ""};
+		}
+	}
 }

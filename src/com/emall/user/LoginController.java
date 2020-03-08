@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,7 +64,7 @@ public class LoginController{
 	
    @RequestMapping(value="/login", method = RequestMethod.POST)
    @ResponseBody
-   public Response register(@RequestBody Account account, HttpServletResponse response) {
+   public Response login(@RequestBody Account account, HttpServletResponse response) {
 	  Response r = new Response();
 	  String data = userService.login(account);
 	  if(data.length() == 36) {
@@ -73,6 +74,16 @@ public class LoginController{
 	  }
 	  r.success = false;
 	  r.data = data;
+	  return r;
+   }
+   
+   @RequestMapping(value="/userId", method = RequestMethod.GET)
+   @ResponseBody
+   public Response getUserId(@CookieValue("UUID") String uuid, HttpServletResponse response) {
+	  Response r = new Response();
+	  Object[] resp = userService.getUserId(uuid);
+	  r.success = (boolean)resp[0];
+	  r.data = (String) resp[1];
 	  return r;
    }
 }
