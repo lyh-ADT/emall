@@ -20,7 +20,7 @@ public class RegisterController{
 		this.userService = userService;
 	}
 
-	public class Response{
+	static public class Response{
 		boolean success;
 		String data;
 		public boolean isSuccess() {

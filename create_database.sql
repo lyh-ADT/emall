@@ -112,3 +112,4 @@ insert into goods(goodId, userId, price, number, goodName, description, imgs) va
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('34ae0eb8-f978-4ce2-805f-5c6b6ece5f8b', 'li', '49.6', '410', '青源堂 精选品质冬虫夏草 4条/g 5g礼盒装 青海玉树高海拔野生虫草', '青源堂 精选品质冬虫夏草 4条/g 5g礼盒装 青海玉树高海拔野生虫草', 'e99149c1-360d-441b-b5b3-7fe9951e1852.jpg');
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('d428d149-77f8-4809-b46f-a3b31844492b', 'li', '6.4', '455', '江中猴姑 五谷养生营养品 早餐米稀 营养米糊(15袋)15天装 450g 猴姑米稀 代餐麦片 营养米稀 猴菇 早餐米稀', '江中猴姑 五谷养生营养品 早餐米稀 营养米糊(15袋)15天装 450g 猴姑米稀 代餐麦片 营养米稀 猴菇 早餐米稀', '74436b5a-dbb2-4098-b0ba-0925331412c4.jpg');
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('24516a9e-bf48-4d93-ae34-6f644b3be81a', 'li', '44.7', '384', '康富来牌 血尔口服液 76ml*8瓶礼盒装 保健礼品 健康礼盒 营养滋补', '康富来牌 血尔口服液 76ml*8瓶礼盒装 保健礼品 健康礼盒 营养滋补', '09a4da59-e943-4d52-bcfe-8911b5ff6471.jpg');
+
