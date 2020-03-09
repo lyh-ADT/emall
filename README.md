@@ -27,10 +27,8 @@
 - userId 
 - balance
 - password
-- role_list
 - cart
-- order_list
-- good_list
+- uuid
 
 订单
 - orderId
