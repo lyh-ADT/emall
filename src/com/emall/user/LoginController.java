@@ -1,7 +1,5 @@
 package com.emall.user;
 
-import java.util.UUID;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,9 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.HttpServletBean;
 
 @Controller
 @ResponseBody
@@ -26,7 +22,7 @@ public class LoginController{
 		this.userService = userService;
 	}
 
-	public class Response{
+	static public class Response{
 		boolean success;
 		String data;
 		public boolean isSuccess() {
