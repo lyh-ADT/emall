@@ -53,7 +53,7 @@
 			let newItem = $("#liItemTemplate").clone();
 			newItem.css("display", "");
 			
-			newItem.find(".itemImg").attr("src", item.img);
+			newItem.find(".itemImg").attr("src", "/goodimgs/"+item.img);
 			newItem.find(".itemTitle").text(item.title);
 			newItem.find(".itemDescription").text(item.description);
 			newItem.find(".itemPrice").text(item.price);
@@ -61,13 +61,6 @@
 
 			itemList.append(newItem);
 		}
-		addItemToList({
-			'img':"/goodimgs/00f41d9a-a633-4310-897a-f8d3e9491fe6.jpg",
-			'title':'标题',
-			'description':'很棒很棒',
-			'price':"50",
-			'number':'100'
-		});
 		
 		function getPage(page=1){
 			let search = location.search;
@@ -79,7 +72,9 @@
 				success : function(result){
 					console.log(result);
 					if(result.success){
-						
+						for(let i of result.data){
+							addItemToList(i);
+						}
 					}else{
 						alert("请先登录");
 					}
