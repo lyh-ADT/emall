@@ -13,13 +13,13 @@
 </head>
 <body class="container">
 
-	
+	<form action="" onsubmit="return search();">
 	<div class="btn-group btn-group-lg w-75" role="group" style="margin:5% 10% 10%;">
-		<input type="text" class="btn-group  w-75" placeholder="搜索"
+		<input type="text" id="inputSearch" class="btn-group  w-75" placeholder="搜索"
 			aria-label="Username" aria-describedby="basic-addon1" style="border:">
-		<button type="button" class="btn btn-primary">搜索</button>
+		<input type="submit" class="btn btn-primary" value="搜索">
 	</div>
-
+	</form>
 	<ul class="list-group" id="ulItemList">
 		
 	
@@ -48,6 +48,13 @@
 	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../js/popper.min.js"></script>
 	<script>
+		function search(){
+			let text = $("#inputSearch").val();
+			getPage(1, text);
+			return false;
+		}
+	</script>
+	<script>
 		itemList = $("#ulItemList");
 		function addItemToList(item){
 			let newItem = $("#liItemTemplate").clone();
@@ -62,11 +69,21 @@
 			itemList.append(newItem);
 		}
 		
-		function getPage(page=1){
+		function getPage(page=1, search_string=""){
+			itemList.empty();
 			let search = location.search;
-			search = search.replace(/page=\d+/, "page="+page);
+			if(search.includes("page=")){
+				search = search.replace(/page=\d+/, "page="+page);
+			}else{
+				search += "page="+page;
+			}
+			if(search.includes("search=")){
+				search = search.replace(/search=\w+/, "search="+search_string);
+			}else{
+				search += "&search="+search_string;
+			}
 			$.ajax({
-				'url':'/goods'+search,
+				'url':'/goods?'+search,
 				type : "GET",
 		        contentType:'application/json;charset=UTF-8',    
 				success : function(result){

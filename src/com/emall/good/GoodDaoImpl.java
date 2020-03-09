@@ -24,7 +24,7 @@ public class GoodDaoImpl implements GoodDao {
 		
 		String sql = "select * from goods where goodName like ? order by goodName limit ?,?";
 		
-		int offset = page * ITEM_PER_PAGE;
+		int offset = (page-1) * ITEM_PER_PAGE;
 		
 		RowMapper<Good> rowMapper = new BeanPropertyRowMapper<Good>(Good.class);
 		
