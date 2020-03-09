@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta charset="utf8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<title>EMall</title>
+<style>
+	.itemImg{
+		width:200px;
+	}
+</style>
+</head>
+<body class="container">
+
+	
+	<div class="btn-group btn-group-lg w-75" role="group" style="margin:5% 10% 10%;">
+		<input type="text" class="btn-group  w-75" placeholder="搜索"
+			aria-label="Username" aria-describedby="basic-addon1" style="border:">
+		<button type="button" class="btn btn-primary">搜索</button>
+	</div>
+
+	<ul class="list-group" id="ulItemList">
+		
+	
+	</ul>
+	
+	<ul style="display:none;">
+	<li class="list-group-item" id="liItemTemplate" style="display:none;">
+		<div class="d-flex flex-row">
+		 <div>
+		 	<img class="itemImg" src="/goodimgs/00f41d9a-a633-4310-897a-f8d3e9491fe6.jpg">
+		 </div>
+		 <div class="itemInfo flex-grow-1 d-flex flex-column">
+		 	<h3 class="itemTitle">标题</h3>
+		 	<p  class="itemDescription flex-grow-1">描述</p>
+		 	<div>
+		 		库存：<span class="itemNumber font-weight-light"></span>个
+		 		<br/>
+		 		价格：<span class="itemPrice font-weight-bold"></span>元
+		 	</div>
+		 	<button class="btn btn-primary align-self-end" style="float:right;">加入购物车</button>
+		 </div>
+		</div>
+	</li>
+	</ul>
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/popper.min.js"></script>
+	<script>
+		itemList = $("#ulItemList");
+		function addItemToList(item){
+			let newItem = $("#liItemTemplate").clone();
+			newItem.css("display", "");
+			
+			newItem.find(".itemImg").attr("src", item.img);
+			newItem.find(".itemTitle").text(item.title);
+			newItem.find(".itemDescription").text(item.description);
+			newItem.find(".itemPrice").text(item.price);
+			newItem.find(".itemNumber").text(item.number);
+
+			itemList.append(newItem);
+		}
+		addItemToList({
+			'img':"/goodimgs/00f41d9a-a633-4310-897a-f8d3e9491fe6.jpg",
+			'title':'标题',
+			'description':'很棒很棒',
+			'price':"50",
+			'number':'100'
+		});
+	</script>
+</body>
+</html>
