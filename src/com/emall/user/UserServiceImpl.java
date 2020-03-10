@@ -1,9 +1,15 @@
 package com.emall.user;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.emall.good.Good;
+import com.emall.good.GoodController;
+
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -74,5 +80,28 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 			return new Object[] {false, ""};
 		}
+	}
+
+	@Override
+	public List<CartController.Good> getCartGoods(String userId, int page, String search) {
+		final String SYMBOL = "%";
+		
+		StringBuilder like_string = new StringBuilder(search);
+		
+		int i=0;
+		while(i < search.length()) {
+			like_string.insert(i, SYMBOL);
+			i += 2;
+		}
+		like_string.append(SYMBOL);
+		
+		List<Good> goods = userDao.getCartGoods(userId, page, like_string.toString());
+		List<CartController.Good> returnList = new LinkedList<>();
+		
+		for(Good g : goods) {
+			returnList.add(CartController.Good.newInstance(g));
+		}
+		
+		return returnList;
 	}
 }

@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.emall.good.Good;
+
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
 
@@ -57,5 +59,18 @@ public class UserDaoImpl implements UserDao {
 			throw new Exception("获取用户名失败，找到了："+list.size());
 		}
 		return list.get(0);
+	}
+
+	@Override
+	public List<Good> getCartGoods(String userId, int page, String like_string) {
+		final int ITEM_PER_PAGE = 10;
+		
+		String sql = "select * from goods where goodId in (select goodId from carts where userId=?) and goodName like ? order by goodName limit ?,?;";
+		
+		int offset = (page-1) * ITEM_PER_PAGE;
+		
+		RowMapper<Good> rowMapper = new BeanPropertyRowMapper<Good>(Good.class);
+		
+		return jdbcTemplate.query(sql, rowMapper, userId, like_string, offset, ITEM_PER_PAGE);
 	}
 }
