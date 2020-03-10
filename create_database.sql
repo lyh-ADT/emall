@@ -7,15 +7,9 @@ create table account(
 	userId 		varchar(100) primary key,
 	balance 	double default 0,
 	password 	varchar(40) not null,
-	cart		text,
 	uuid		varchar(40),
 	constraint chk_balance CHECK (balance >= 0)
 );
-
--- 测试用数据
-insert into account values('li', 1000, 'e10adc39-49ba59ab-be56e057-f20f883e'/*123456*/, null);
-insert into account values('yu', 600, 'e10adc39-49ba59ab-be56e057-f20f883e'/*123456*/, null);
-
 
 -- 创建商品表
 create table goods(
@@ -31,7 +25,22 @@ create table goods(
 	FOREIGN KEY fk_userId(userId)REFERENCES account(userId)
 );
 
--- 测试用数据 80条
+-- 创建购物车表
+create table carts(
+	userId varchar(100),
+	goodId varchar(100),
+	number int default 0,
+	primary key(userId, goodId),
+	constraint chk_carts_number CHECK (number >= 0),
+	FOREIGN KEY fk_carts_userId(userId)REFERENCES account(userId)
+);
+
+
+-- 测试用用户数据
+insert into account values('li', 1000, 'e10adc39-49ba59ab-be56e057-f20f883e'/*123456*/, null);
+insert into account values('yu', 600, 'e10adc39-49ba59ab-be56e057-f20f883e'/*123456*/, null);
+
+-- 测试用商品数据 80条
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('e0a03826-090a-45f9-bac0-10b608978b07', 'li', '34.1', '589', '疫情原因 发货待定 四川塔罗科血橙 新鲜水果 净重2.5斤装 果径70-80mm 2单合发1件5斤装 偶数件发货 奥奇健', '疫情原因 发货待定 四川塔罗科血橙 新鲜水果 净重2.5斤装 果径70-80mm 2单合发1件5斤装 偶数件发货 奥奇健', '39e13795-8da6-4b8b-b796-e7607c7ea012.jpg');
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('5d8312a4-709a-4767-b189-1d7a9882e206', 'li', '87.8', '834', '【天府生鲜】甘肃花牛苹果 粉面苹果 75#-80#左右2.5斤 粉面香甜 西沛水果', '【天府生鲜】甘肃花牛苹果 粉面苹果 75#-80#左右2.5斤 粉面香甜 西沛水果', '21088ce7-1877-4697-a0d7-e99ecfa14254.jpg');
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('71a13786-5628-4cb0-9c09-48da48829234', 'li', '82.6', '853', '绝世原味火山石烤肠地道肠台式肉肠热狗香肠烧烤脆皮肠3斤批发', '绝世原味火山石烤肠地道肠台式肉肠热狗香肠烧烤脆皮肠3斤批发', '73ebfd80-a045-49fb-abb8-5ec24f081fc8.jpg');
@@ -112,3 +121,8 @@ insert into goods(goodId, userId, price, number, goodName, description, imgs) va
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('34ae0eb8-f978-4ce2-805f-5c6b6ece5f8b', 'li', '49.6', '410', '青源堂 精选品质冬虫夏草 4条/g 5g礼盒装 青海玉树高海拔野生虫草', '青源堂 精选品质冬虫夏草 4条/g 5g礼盒装 青海玉树高海拔野生虫草', 'e99149c1-360d-441b-b5b3-7fe9951e1852.jpg');
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('d428d149-77f8-4809-b46f-a3b31844492b', 'li', '6.4', '455', '江中猴姑 五谷养生营养品 早餐米稀 营养米糊(15袋)15天装 450g 猴姑米稀 代餐麦片 营养米稀 猴菇 早餐米稀', '江中猴姑 五谷养生营养品 早餐米稀 营养米糊(15袋)15天装 450g 猴姑米稀 代餐麦片 营养米稀 猴菇 早餐米稀', '74436b5a-dbb2-4098-b0ba-0925331412c4.jpg');
 insert into goods(goodId, userId, price, number, goodName, description, imgs) values('24516a9e-bf48-4d93-ae34-6f644b3be81a', 'li', '44.7', '384', '康富来牌 血尔口服液 76ml*8瓶礼盒装 保健礼品 健康礼盒 营养滋补', '康富来牌 血尔口服液 76ml*8瓶礼盒装 保健礼品 健康礼盒 营养滋补', '09a4da59-e943-4d52-bcfe-8911b5ff6471.jpg');
+
+-- 测试用购物车数据
+insert into carts values('li', 'a72a30b1-8ca7-4ba9-9f3f-cf97fb9d4c3c', '13');
+insert into carts values('li', 'c2f1dac4-55d4-4855-9db5-35d3fff3964d', '100');
+insert into carts values('li', '3c4903c2-2c29-4b04-b2c3-6c7efe14bdf7', '1000');
