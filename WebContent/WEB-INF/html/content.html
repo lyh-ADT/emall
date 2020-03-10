@@ -26,8 +26,8 @@
 	</ul>
 	
 	<div class="d-flex justify-content-between" style="margin:2% 0 10%;">
-	  <button type="button" class="btn btn-light" style="width:25%;">上一页</button>
-	  <button type="button" class="btn btn-primary" style="width:50%;">下一页</button>
+	  <button type="button" class="btn btn-light" style="width:25%;" onclick="previousPage();">上一页</button>
+	  <button type="button" class="btn btn-primary" style="width:50%;"  onclick="nextPage();">下一页</button>
 	</div>
 
 	
@@ -105,7 +105,21 @@
 			});
 		}
 		
-		getPage();
+		curPageNumber = 1;
+		getPage(curPageNumber);
+		
+		function nextPage(){
+			curPageNumber += 1;
+			getPage(curPageNumber);
+		}
+		function previousPage(){
+			if(curPageNumber > 1){
+				curPageNumber--;
+				getPage(curPageNumber);
+			}else{
+				alert("前面没有了");
+			}
+		}
 	</script>
 </body>
 </html>
