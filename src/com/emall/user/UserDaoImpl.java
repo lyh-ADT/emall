@@ -1,5 +1,8 @@
 package com.emall.user;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,5 +47,16 @@ public class UserDaoImpl implements UserDao {
 			account.getPassword()
 		};
 		return jdbcTemplate.update(sql, obj) == 1;
+	}
+
+	@Override
+	public String getUserId(String uuid) throws Exception {
+		String sql = "select userId from account where uuid=?;";
+
+		List<String> list = jdbcTemplate.queryForList(sql, String.class, uuid);
+		if(list.size() != 1) {
+			throw new Exception("获取用户名失败，找到了："+list.size());
+		}
+		return list.get(0);
 	}
 }

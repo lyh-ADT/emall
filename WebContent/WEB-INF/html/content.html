@@ -1,0 +1,125 @@
+<html>
+<head>
+<meta charset="utf8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<title>EMall</title>
+<style>
+	.itemImg{
+		width:200px;
+	}
+</style>
+</head>
+<body class="container">
+
+	<form action="" onsubmit="return search();">
+	<div class="btn-group btn-group-lg w-75" role="group" style="margin:5% 10% 10%;">
+		<input type="text" id="inputSearch" class="btn-group  w-75" placeholder="搜索"
+			aria-label="Username" aria-describedby="basic-addon1" style="border-top-left-radius: .3rem;border-bottom-left-radius: .3rem;">
+		<input type="submit" class="btn btn-primary" value="搜索">
+	</div>
+	</form>
+	<ul class="list-group" id="ulItemList">
+		
+	
+	</ul>
+	
+	<div class="d-flex justify-content-between" style="margin:2% 0 10%;">
+	  <button type="button" class="btn btn-light" style="width:25%;" onclick="previousPage();">上一页</button>
+	  <button type="button" class="btn btn-primary" style="width:50%;"  onclick="nextPage();">下一页</button>
+	</div>
+
+	
+	<ul style="display:none;">
+	<li class="list-group-item" id="liItemTemplate" style="display:none;">
+		<div class="d-flex flex-row">
+		 <div>
+		 	<img class="itemImg" src="/goodimgs/00f41d9a-a633-4310-897a-f8d3e9491fe6.jpg">
+		 </div>
+		 <div class="itemInfo flex-grow-1 d-flex flex-column">
+		 	<h3 class="itemTitle">标题</h3>
+		 	<p  class="itemDescription flex-grow-1">描述</p>
+		 	<div>
+		 		库存：<span class="itemNumber font-weight-light"></span>个
+		 		<br/>
+		 		价格：<span class="itemPrice font-weight-bold"></span>元
+		 	</div>
+		 	<button class="btn btn-primary align-self-end" style="float:right;">加入购物车</button>
+		 </div>
+		</div>
+	</li>
+	</ul>
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/popper.min.js"></script>
+	<script>
+		function search(){
+			let text = $("#inputSearch").val();
+			getPage(1, text);
+			return false;
+		}
+	</script>
+	<script>
+		itemList = $("#ulItemList");
+		function addItemToList(item){
+			let newItem = $("#liItemTemplate").clone();
+			newItem.css("display", "");
+			
+			newItem.find(".itemImg").attr("src", "/goodimgs/"+item.img);
+			newItem.find(".itemTitle").text(item.title);
+			newItem.find(".itemDescription").text(item.description);
+			newItem.find(".itemPrice").text(item.price);
+			newItem.find(".itemNumber").text(item.number);
+
+			itemList.append(newItem);
+		}
+		
+		function getPage(page=1, search_string=""){
+			itemList.empty();
+			let search = location.search;
+			if(search.includes("page=")){
+				search = search.replace(/page=\d+/, "page="+page);
+			}else{
+				search += "page="+page;
+			}
+			if(search.includes("search=")){
+				search = search.replace(/search=\w+/, "search="+search_string);
+			}else{
+				search += "&search="+search_string;
+			}
+			$.ajax({
+				'url':'/goods?'+search,
+				type : "GET",
+		        contentType:'application/json;charset=UTF-8',    
+				success : function(result){
+					console.log(result);
+					if(result.success){
+						for(let i of result.data){
+							addItemToList(i);
+						}
+					}else{
+						alert("请先登录");
+					}
+				}
+			});
+		}
+		
+		curPageNumber = 1;
+		getPage(curPageNumber);
+		
+		function nextPage(){
+			curPageNumber += 1;
+			getPage(curPageNumber);
+		}
+		function previousPage(){
+			if(curPageNumber > 1){
+				curPageNumber--;
+				getPage(curPageNumber);
+			}else{
+				alert("前面没有了");
+			}
+		}
+	</script>
+</body>
+</html>
