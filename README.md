@@ -45,8 +45,11 @@
 商品
 - goodId
 - userId
+- goodName
 - price
 - number
+- description
+- imgs
 
 
 
