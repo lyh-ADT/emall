@@ -3,6 +3,7 @@ package com.emall.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,7 @@ public class CartController{
 	}
 	
 	static public class Good{
+		String id;
 		String img;
 		String title;
 		String description;
@@ -31,6 +33,7 @@ public class CartController{
 		
 	static public Good newInstance(com.emall.good.Good good) {
 		Good g = new Good();
+		g.id = good.getGoodId();
 		g.img = good.getImgs().get(0);
 		g.title = good.getGoodName();
 		g.description = good.getDescription();
@@ -39,6 +42,12 @@ public class CartController{
 		return g;
 	}
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getImg() {
 		return img;
 	}
@@ -75,6 +84,26 @@ public class CartController{
    @ResponseBody
    public Response getCartGoods(@CookieValue("UUID") String userId, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="search", defaultValue="") String search) {
 	  Response r = new Response(true, userService.getCartGoods(userId, page, search));
+	  return r;
+   }
+   
+   static private class IdBean{
+	   String id;
+
+		public String getId() {
+			return id;
+		}
+	
+		public void setId(String id) {
+			this.id = id;
+		}
+	   
+   }
+   
+   @RequestMapping(value="/removeFromCart", method = RequestMethod.POST)
+   @ResponseBody
+   public Response removeFromCart(@CookieValue("UUID") String userId, @RequestBody IdBean idBean) {
+	  Response r = new Response(true, userService.removeFromCart(userId, idBean.getId()));
 	  return r;
    }
 }

@@ -104,4 +104,15 @@ public class UserServiceImpl implements UserService {
 		
 		return returnList;
 	}
+
+	@Override
+	public String removeFromCart(String userId, String id) {
+		try {
+			userDao.removeFromCart(userId, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "É¾³ýÊ§°Ü";
+		}
+		return null;
+	}
 }

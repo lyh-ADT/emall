@@ -45,7 +45,10 @@
 		 		<br/>
 		 		价格：<span class="itemPrice font-weight-bold"></span>元
 		 	</div>
-
+			<div class="btn-group align-self-end">
+				<button class="btn btn-danger" onclick="removeFromCart(this.parentElement.parentElement.parentElement.parentElement)">移除</button>
+				<button class="btn btn-primary" onclick="buyFromCart(this.parentElement.parentElement.parentElement.parentElement.dataset.id)">购买</button>
+			</div>
 		 </div>
 		</div>
 	</li>
@@ -53,6 +56,27 @@
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
 	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../js/popper.min.js"></script>
+	
+	<div class="modal" id="modalDeleteFromCart" tabindex="-1" role="dialog">
+		<div class="modal-dialog min-vw-100" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">确认从购物车中删除吗？</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" >
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-danger comfirmDeleteFormCart">删除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<script>
 		function search(){
 			let text = $("#inputSearch").val();
@@ -66,6 +90,7 @@
 			let newItem = $("#liItemTemplate").clone();
 			newItem.css("display", "");
 			
+			newItem.attr("data-id", item.id);
 			newItem.find(".itemImg").attr("src", "/goodimgs/"+item.img);
 			newItem.find(".itemTitle").text(item.title);
 			newItem.find(".itemDescription").text(item.description);
@@ -119,6 +144,39 @@
 			}else{
 				alert("前面没有了");
 			}
+		}
+		function removeFromCart(goodli){
+			let li = $(goodli);
+			let modal = $("#modalDeleteFromCart");
+			let good = li.children("div").clone();
+			good.find("button").remove();
+			
+			modal.find(".modal-body").empty().append(good);
+			modal.modal("show");
+			modal.find(".comfirmDeleteFormCart").click(function(){
+				$.ajax({
+					url:'/removeFromCart',
+					data : JSON.stringify({
+						id:li.attr("data-id")
+					}),
+				    dataType: 'json',
+					type : "POST",
+			        contentType:'application/json;charset=UTF-8',    
+					success : function(result){
+						console.log(result);
+						if(result.success){
+							getPage(curPageNumber);
+							modal.modal("hide");
+							modal.modal("dispose");
+						}else{
+							alert(result.data);
+						}
+					}
+				});
+			});
+		}
+		function buyFromCart(goodId){
+			
 		}
 	</script>
 </body>

@@ -73,4 +73,14 @@ public class UserDaoImpl implements UserDao {
 		
 		return jdbcTemplate.query(sql, rowMapper, userId, like_string, offset, ITEM_PER_PAGE);
 	}
+
+	@Override
+	public void removeFromCart(String userId, String id) throws Exception {
+
+		String sql = "delete from carts where userId=? and goodId=?;";
+		
+		if(jdbcTemplate.update(sql, userId, id) != 1) {
+			throw new Exception();
+		}
+	}
 }

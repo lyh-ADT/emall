@@ -10,4 +10,5 @@ public interface UserDao {
 	boolean login(Account account, String uuid);
 	String getUserId(String uuid) throws Exception;
 	List<Good> getCartGoods(String userId, int page, String like_string);
+	void removeFromCart(String userId, String id) throws Exception;
 }
