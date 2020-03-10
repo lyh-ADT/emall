@@ -21,6 +21,7 @@ public class GoodController {
 	}
 	
 	static public class Good{
+		String id;
 		String img;
 		String title;
 		String description;
@@ -29,6 +30,7 @@ public class GoodController {
 		
 		static public Good newInstance(com.emall.good.Good good) {
 			Good g = new Good();
+			g.id = good.getGoodId();
 			g.img = good.getImgs().get(0);
 			g.title = good.getGoodName();
 			g.description = good.getDescription();
@@ -37,6 +39,12 @@ public class GoodController {
 			return g;
 		}
 		
+		public String getId() {
+			return id;
+		}
+		public void setId(String id) {
+			this.id = id;
+		}
 		public String getImg() {
 			return img;
 		}

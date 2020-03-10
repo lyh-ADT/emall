@@ -115,4 +115,15 @@ public class UserServiceImpl implements UserService {
 		}
 		return null;
 	}
+
+	@Override
+	public String addToCart(String userId, String id) {
+		try {
+			userDao.addToCart(userId, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "ÃÌº” ß∞‹";
+		}
+		return null;
+	}
 }

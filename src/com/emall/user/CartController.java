@@ -106,4 +106,11 @@ public class CartController{
 	  Response r = new Response(true, userService.removeFromCart(userId, idBean.getId()));
 	  return r;
    }
+   
+   @RequestMapping(value="/addToCart", method = RequestMethod.POST)
+   @ResponseBody
+   public Response addToCart(@CookieValue("UUID") String userId, @RequestBody IdBean idBean) {
+	  Response r = new Response(true, userService.addToCart(userId, idBean.getId()));
+	  return r;
+   }
 }

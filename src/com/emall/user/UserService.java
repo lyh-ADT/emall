@@ -9,4 +9,5 @@ public interface UserService {
 	Object[] getUserId(String uuid);
 	List<CartController.Good> getCartGoods(String useerId, int page, String search);
 	String removeFromCart(String userId, String id);
+	String addToCart(String userId, String id);
 }

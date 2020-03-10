@@ -83,4 +83,13 @@ public class UserDaoImpl implements UserDao {
 			throw new Exception();
 		}
 	}
+
+	@Override
+	public void addToCart(String userId, String id) throws Exception {
+		String sql = "insert into carts(userId, goodId) values(?, ?);";
+		
+		if(jdbcTemplate.update(sql, userId, id) != 1) {
+			throw new Exception();
+		}
+	}
 }

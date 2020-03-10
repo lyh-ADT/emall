@@ -9,6 +9,9 @@
 	.itemImg{
 		width:200px;
 	}
+	.popover {
+	    z-index: 1010;
+	}
 </style>
 </head>
 <body class="container">
@@ -45,14 +48,16 @@
 		 		<br/>
 		 		价格：<span class="itemPrice font-weight-bold"></span>元
 		 	</div>
-		 	<button class="btn btn-primary align-self-end" style="float:right;">加入购物车</button>
+		 	<button class="btn btn-primary align-self-end" style="float:right;"
+		 	 title="加入购物车" data-content="添加成功！" data-placement="right" data-container="body"
+		 	 onclick="addToCart(this, this.parentElement.parentElement.parentElement.dataset.id)">加入购物车</button>
 		 </div>
 		</div>
 	</li>
 	</ul>
 	<script type="text/javascript" src="../js/jquery.min.js"></script>
-	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../js/popper.min.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 	<script>
 		function search(){
 			let text = $("#inputSearch").val();
@@ -66,6 +71,7 @@
 			let newItem = $("#liItemTemplate").clone();
 			newItem.css("display", "");
 			
+			newItem.attr("data-id", item.id);
 			newItem.find(".itemImg").attr("src", "/goodimgs/"+item.img);
 			newItem.find(".itemTitle").text(item.title);
 			newItem.find(".itemDescription").text(item.description);
@@ -119,6 +125,34 @@
 			}else{
 				alert("前面没有了");
 			}
+		}
+		
+		function addToCart(btn, id){
+			$.ajax({
+				'url':'/addToCart',
+				type : "POST",
+				data:JSON.stringify({
+					'id':id
+				}),
+				dataType:"json",
+		        contentType:'application/json;charset=UTF-8',
+				success : function(result){
+					console.log(result);
+					if(result.success){
+						$(btn).popover({
+							container: 'body',
+							'boundary':'viewport'
+						});
+						$(btn).popover('show');
+						setTimeout(function(){
+							$(btn).popover('hide');
+						}, 3000);
+						
+					}else{
+						alert("请先登录");
+					}
+				}
+			});
 		}
 	</script>
 </body>
