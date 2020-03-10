@@ -16,7 +16,7 @@
 	<form action="" onsubmit="return search();">
 	<div class="btn-group btn-group-lg w-75" role="group" style="margin:5% 10% 10%;">
 		<input type="text" id="inputSearch" class="btn-group  w-75" placeholder="搜索"
-			aria-label="Username" aria-describedby="basic-addon1" style="border:">
+			aria-label="Username" aria-describedby="basic-addon1" style="border-top-left-radius: .3rem;border-bottom-left-radius: .3rem;">
 		<input type="submit" class="btn btn-primary" value="搜索">
 	</div>
 	</form>
@@ -24,6 +24,12 @@
 		
 	
 	</ul>
+	
+	<div class="d-flex justify-content-between" style="margin:2% 0 10%;">
+	  <button type="button" class="btn btn-light" style="width:25%;">上一页</button>
+	  <button type="button" class="btn btn-primary" style="width:50%;">下一页</button>
+	</div>
+
 	
 	<ul style="display:none;">
 	<li class="list-group-item" id="liItemTemplate" style="display:none;">
