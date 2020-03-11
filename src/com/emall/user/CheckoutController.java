@@ -80,7 +80,7 @@ public class CheckoutController {
 		}
 	}
 	
-	@RequestMapping(value="/checkout", method = RequestMethod.GET)
+	@RequestMapping(value="/good", method = RequestMethod.GET)
 	public Response checkout(@CookieValue("UUID") String userId, @RequestParam(value="id", defaultValue="null") List<String> ids, @RequestParam(value="all", defaultValue="false") boolean all){
 		return new Response(true, userService.getGoodById(userId, all, ids));
 	}
