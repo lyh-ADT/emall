@@ -10,4 +10,5 @@ public interface UserService {
 	List<CartController.Good> getCartGoods(String useerId, int page, String search);
 	String removeFromCart(String userId, String id);
 	String addToCart(String userId, String id);
+	List<CheckoutController.Good> getGoodById(String userId, boolean all, List<String> ids);
 }

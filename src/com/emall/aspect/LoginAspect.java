@@ -20,7 +20,7 @@ public class LoginAspect {
 	@Autowired
 	private UserDao userDao;
 	
-	@Pointcut("execution(* com.emall.good.*Controller.*(..)) || execution(* com.emall.user.CartController.*(..))")
+	@Pointcut("execution(* com.emall.*.*Controller.*(..)) && !execution(* com.emall.user.LoginController.*(..)) && !execution(* com.emall.user.RegisterController.*(..))")
 	private void loginPointCut() {}
 	
 	@Around("loginPointCut()")

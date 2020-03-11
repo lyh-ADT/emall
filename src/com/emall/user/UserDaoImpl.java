@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.emall.good.Good;
@@ -15,6 +17,12 @@ public class UserDaoImpl implements UserDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -91,5 +99,28 @@ public class UserDaoImpl implements UserDao {
 		if(jdbcTemplate.update(sql, userId, id) != 1) {
 			throw new Exception();
 		}
+	}
+	
+	@Override
+	public List<Good> getGoods(List<String> ids) {
+		String sql = "select * from goods where goodId in (:ids);";
+		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+	    parameters.addValue("ids", ids);
+		
+		RowMapper<Good> rowMapper = new BeanPropertyRowMapper<Good>(Good.class);
+		return namedParameterJdbcTemplate.query(sql, parameters, rowMapper);
+	}
+
+	@Override
+	public List<Good> getGoodsInCart(String userId) {
+		String sql = "select * from goods where goodId in (select goodId from carts where userId=:userId);";
+		
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+	    parameters.addValue("userId", userId);
+		
+		RowMapper<Good> rowMapper = new BeanPropertyRowMapper<Good>(Good.class);
+		
+		return namedParameterJdbcTemplate.query(sql, parameters, rowMapper);
 	}
 }

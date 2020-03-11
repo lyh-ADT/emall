@@ -126,4 +126,20 @@ public class UserServiceImpl implements UserService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<CheckoutController.Good> getGoodById(String userId, boolean all, List<String> ids) {
+		List<Good> goods;
+		if(all) {
+			goods = userDao.getGoodsInCart(userId);
+		} else {
+			goods = userDao.getGoods(ids);
+		}
+		
+		List<CheckoutController.Good> returnList = new LinkedList<CheckoutController.Good>();
+		for(Good g : goods) {
+			returnList.add(CheckoutController.Good.newInstance(g));
+		}
+		return returnList;
+	}
 }
