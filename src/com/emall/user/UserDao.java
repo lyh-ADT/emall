@@ -14,4 +14,5 @@ public interface UserDao {
 	void addToCart(String userId, String id) throws Exception;
 	List<Good> getGoods(List<String> ids);
 	List<Good> getGoodsInCart(String userId);
+	String getBalance(String userId);
 }

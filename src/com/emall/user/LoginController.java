@@ -83,4 +83,11 @@ public class LoginController{
 	  r.data = (String) resp[1];
 	  return r;
    }
+   
+   @RequestMapping(value="/balance", method = RequestMethod.GET)
+   @ResponseBody
+   public com.emall.aspect.Response getBalance(@CookieValue("UUID") String userId) {
+	  com.emall.aspect.Response r = new com.emall.aspect.Response(true, userService.getBalance(userId));
+	  return r;
+   }
 }

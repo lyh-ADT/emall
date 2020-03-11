@@ -142,4 +142,9 @@ public class UserServiceImpl implements UserService {
 		}
 		return returnList;
 	}
+
+	@Override
+	public String getBalance(String userId) {
+		return userDao.getBalance(userId);
+	}
 }

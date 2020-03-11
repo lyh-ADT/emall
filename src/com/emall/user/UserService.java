@@ -11,4 +11,5 @@ public interface UserService {
 	String removeFromCart(String userId, String id);
 	String addToCart(String userId, String id);
 	List<CheckoutController.Good> getGoodById(String userId, boolean all, List<String> ids);
+	String getBalance(String userId);
 }

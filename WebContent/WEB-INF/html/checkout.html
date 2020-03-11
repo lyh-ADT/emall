@@ -21,6 +21,7 @@
 	<div class="d-flex justify-content-end" style="margin:2% 0 10%;">
 		<div>
 			<p>总价：<span class="font-weight-bold" id="totalPrice"></span>元</p>
+			<p>余额：<span id="balance"></span>元</p>
 			<button class="btn btn-primary" style="float:right;">支付</button>
 		</div>
 	</div>
@@ -117,6 +118,23 @@
 		}
 		
 		getPage();
+		
+		function getBalance(){
+			$.ajax({
+				'url':'/balance',
+				type : "GET",
+		        contentType:'application/json;charset=UTF-8',    
+				success : function(result){
+					console.log(result);
+					if(result.success){
+						$("#balance").text(result.data);
+					}else{
+						alert("请先登录");
+					}
+				}
+			});
+		};
+		getBalance();
 		
 		function removeFromCheckout(goodli){
 			let li = $(goodli);

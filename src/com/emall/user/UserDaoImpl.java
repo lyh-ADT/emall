@@ -123,4 +123,10 @@ public class UserDaoImpl implements UserDao {
 		
 		return namedParameterJdbcTemplate.query(sql, parameters, rowMapper);
 	}
+
+	@Override
+	public String getBalance(String userId) {
+		String sql = "select balance from account where userId=?;";
+		return jdbcTemplate.queryForObject(sql, String.class, userId);
+	}
 }
