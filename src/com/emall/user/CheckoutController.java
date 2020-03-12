@@ -86,6 +86,25 @@ public class CheckoutController {
 		return new Response(true, userService.getGoodById(userId, all, ids));
 	}
 	
+	static public class CheckoutInfo{
+		List<CheckoutGood> goods;
+		String address;
+		public List<CheckoutGood> getGoods() {
+			return goods;
+		}
+		public void setGoods(List<CheckoutGood> goods) {
+			this.goods = goods;
+		}
+		public String getAddress() {
+			return address;
+		}
+		public void setAddress(String address) {
+			this.address = address;
+		}
+		
+	}
+		
+	
 	static public class CheckoutGood{
 		String id;
 		int number;
@@ -104,8 +123,8 @@ public class CheckoutController {
 	}
 	
 	@RequestMapping(value="/checkout", method = RequestMethod.POST)
-	public Response checkout(@CookieValue("UUID") String userId, @RequestBody List<CheckoutGood> goods){
-		userService.checkout(userId, goods);
+	public Response checkout(@CookieValue("UUID") String userId, @RequestBody CheckoutInfo info){
+		userService.checkout(userId, info.goods, info.address);
 		return new Response(true, null);
 	}
 }

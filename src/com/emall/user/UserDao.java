@@ -15,5 +15,5 @@ public interface UserDao {
 	List<Good> getGoods(List<String> ids);
 	List<Good> getGoodsInCart(String userId);
 	String getBalance(String userId);
-	void checkout(String userId, List<Good> daoGoods);
+	void checkout(String userId, List<Good> daoGoods, String address);
 }

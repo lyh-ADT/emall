@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void checkout(String userId, List<CheckoutGood> goods) {
+	public void checkout(String userId, List<CheckoutGood> goods, String address) {
 		List<com.emall.good.Good> daoGoods = new LinkedList<>();
 		for(CheckoutGood g: goods) {
 			com.emall.good.Good daoGood = new Good();
@@ -158,6 +158,6 @@ public class UserServiceImpl implements UserService {
 			daoGood.setNumber(g.number);
 			daoGoods.add(daoGood);
 		}
-		userDao.checkout(userId, daoGoods);
+		userDao.checkout(userId, daoGoods, address);
 	}
 }

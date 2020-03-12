@@ -2,6 +2,7 @@ package com.emall.user;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -132,7 +133,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void checkout(String userId, List<Good> daoGoods) {
+	public void checkout(String userId, List<Good> daoGoods, String address) {
 		String sql = "select userId from goods where goodId in (:ids) group by userId;";
 		List<String> ids = new LinkedList<>();
 		for(Good g : daoGoods) {
@@ -143,25 +144,28 @@ public class UserDaoImpl implements UserDao {
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("ids", ids);
 		for(String sellerId : namedParameterJdbcTemplate.queryForList(sql, parameters, String.class)) {
-			checkoutOneSeller(userId, sellerId, daoGoods);
+			checkoutOneSeller(userId, sellerId, daoGoods, UUID.randomUUID().toString(), address);
 		}
 		// 删除买家购物车中的物品
 		parameters.addValue("userId", userId);
 		sql = "delete from carts where userId=:userId and goodId in (:ids)";
 		namedParameterJdbcTemplate.update(sql, parameters);
+		
 	}
 	
-	private void checkoutOneSeller(String buyerId, String sellerId, List<Good> allGoods) {
+	private void checkoutOneSeller(String buyerId, String sellerId, List<Good> allGoods, String orderId, String address) {
 		String sql;
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("buyerId", buyerId);
 		parameters.addValue("sellerId", sellerId);
 		
 		// 扣除卖家库存
+		List<String> ids = new LinkedList<>();
 		sql = "update goods set number=number-:number where goodId=:goodId and userId=:sellerId;";
 		for(Good g : allGoods) {
 			parameters.addValue("number", g.getNumber());
 			parameters.addValue("goodId", g.getGoodId());
+			ids.add(g.getGoodId());
 			namedParameterJdbcTemplate.update(sql, parameters);
 		}
 		
@@ -182,7 +186,12 @@ public class UserDaoImpl implements UserDao {
 		sql = "update account set balance=balance+:totalPrice where userId=:sellerId;";
 		namedParameterJdbcTemplate.update(sql, parameters);
 		
-		// 增加买家订单记录
-		// 增加卖家订单记录
+		// 增加订单记录
+		parameters.addValue("ids", ids);
+		parameters.addValue("address", address);
+		parameters.addValue("orderId", orderId);
+		sql = "insert into orders(orderId, buyerId, sellerId, goodId_list, address, totalPrice) values(:orderId, :buyerId, :sellerId, "+
+				"(select group_concat('', goodId, '') from goods where goodId in (:ids) and userId=(:sellerId)), :address, :totalPrice);";
+		namedParameterJdbcTemplate.update(sql, parameters);
 	}
 }
