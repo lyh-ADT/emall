@@ -11,6 +11,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.emall.good.Good;
 
@@ -133,6 +136,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public void checkout(String userId, List<Good> daoGoods, String address) {
 		String sql = "select userId from goods where goodId in (:ids) group by userId;";
 		List<String> ids = new LinkedList<>();
