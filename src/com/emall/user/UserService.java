@@ -2,6 +2,8 @@ package com.emall.user;
 
 import java.util.List;
 
+import com.emall.user.CheckoutController.CheckoutGood;
+
 public interface UserService {
 	boolean checkUserIdRepeated(String userId);
 	boolean register(RegisterController.Account account);
@@ -12,4 +14,5 @@ public interface UserService {
 	String addToCart(String userId, String id);
 	List<CheckoutController.Good> getGoodById(String userId, boolean all, List<String> ids);
 	String getBalance(String userId);
+	void checkout(String userId, List<CheckoutGood> goods);
 }

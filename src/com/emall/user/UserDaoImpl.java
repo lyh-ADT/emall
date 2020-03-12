@@ -1,5 +1,6 @@
 package com.emall.user;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,5 +129,60 @@ public class UserDaoImpl implements UserDao {
 	public String getBalance(String userId) {
 		String sql = "select balance from account where userId=?;";
 		return jdbcTemplate.queryForObject(sql, String.class, userId);
+	}
+
+	@Override
+	public void checkout(String userId, List<Good> daoGoods) {
+		String sql = "select userId from goods where goodId in (:ids) group by userId;";
+		List<String> ids = new LinkedList<>();
+		for(Good g : daoGoods) {
+			ids.add(g.getGoodId());
+		}
+		
+		// 每个卖家单独处理
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("ids", ids);
+		for(String sellerId : namedParameterJdbcTemplate.queryForList(sql, parameters, String.class)) {
+			checkoutOneSeller(userId, sellerId, daoGoods);
+		}
+		// 删除买家购物车中的物品
+		parameters.addValue("userId", userId);
+		sql = "delete from carts where userId=:userId and goodId in (:ids)";
+		namedParameterJdbcTemplate.update(sql, parameters);
+	}
+	
+	private void checkoutOneSeller(String buyerId, String sellerId, List<Good> allGoods) {
+		String sql;
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("buyerId", buyerId);
+		parameters.addValue("sellerId", sellerId);
+		
+		// 扣除卖家库存
+		sql = "update goods set number=number-:number where goodId=:goodId and userId=:sellerId;";
+		for(Good g : allGoods) {
+			parameters.addValue("number", g.getNumber());
+			parameters.addValue("goodId", g.getGoodId());
+			namedParameterJdbcTemplate.update(sql, parameters);
+		}
+		
+		// 计算总价
+		double totalPrice = 0;
+		sql = "select price from goods where goodId=:goodId and userId=:sellerId;";
+		for(Good g : allGoods) {
+			parameters.addValue("goodId", g.getGoodId());
+			totalPrice += namedParameterJdbcTemplate.queryForObject(sql, parameters, Double.class);
+		}
+		parameters.addValue("totalPrice", totalPrice);
+		
+		// 扣除买家的钱
+		sql = "update account set balance=balance-:totalPrice where userId=:buyerId;";
+		namedParameterJdbcTemplate.update(sql, parameters);
+		
+		// 增加卖家的钱
+		sql = "update account set balance=balance+:totalPrice where userId=:sellerId;";
+		namedParameterJdbcTemplate.update(sql, parameters);
+		
+		// 增加买家订单记录
+		// 增加卖家订单记录
 	}
 }

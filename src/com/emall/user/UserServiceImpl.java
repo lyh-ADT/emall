@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.emall.good.Good;
 import com.emall.good.GoodController;
+import com.emall.user.CheckoutController.CheckoutGood;
 
 
 @Service("userService")
@@ -146,5 +147,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String getBalance(String userId) {
 		return userDao.getBalance(userId);
+	}
+
+	@Override
+	public void checkout(String userId, List<CheckoutGood> goods) {
+		List<com.emall.good.Good> daoGoods = new LinkedList<>();
+		for(CheckoutGood g: goods) {
+			com.emall.good.Good daoGood = new Good();
+			daoGood.setGoodId(g.id);
+			daoGood.setNumber(g.number);
+			daoGoods.add(daoGood);
+		}
+		userDao.checkout(userId, daoGoods);
 	}
 }

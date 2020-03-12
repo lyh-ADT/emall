@@ -76,11 +76,10 @@ public class LoginController{
 
    @RequestMapping(value="/userId", method = RequestMethod.GET)
    @ResponseBody
-   public Response getUserId(@CookieValue("UUID") String uuid, HttpServletResponse response) {
+   public Response getUserId(@CookieValue("UUID") String userId, HttpServletResponse response) {
 	  Response r = new Response();
-	  Object[] resp = userService.getUserId(uuid);
-	  r.success = (boolean)resp[0];
-	  r.data = (String) resp[1];
+	  r.success = true;
+	  r.data = userId;
 	  return r;
    }
    

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,7 +82,30 @@ public class CheckoutController {
 	}
 	
 	@RequestMapping(value="/good", method = RequestMethod.GET)
-	public Response checkout(@CookieValue("UUID") String userId, @RequestParam(value="id", defaultValue="null") List<String> ids, @RequestParam(value="all", defaultValue="false") boolean all){
+	public Response good(@CookieValue("UUID") String userId, @RequestParam(value="id", defaultValue="null") List<String> ids, @RequestParam(value="all", defaultValue="false") boolean all){
 		return new Response(true, userService.getGoodById(userId, all, ids));
+	}
+	
+	static public class CheckoutGood{
+		String id;
+		int number;
+		public String getId() {
+			return id;
+		}
+		public void setId(String id) {
+			this.id = id;
+		}
+		public int getNumber() {
+			return number;
+		}
+		public void setNumber(int number) {
+			this.number = number;
+		}
+	}
+	
+	@RequestMapping(value="/checkout", method = RequestMethod.POST)
+	public Response checkout(@CookieValue("UUID") String userId, @RequestBody List<CheckoutGood> goods){
+		userService.checkout(userId, goods);
+		return new Response(true, null);
 	}
 }
