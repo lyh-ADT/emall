@@ -35,6 +35,19 @@ create table carts(
 	FOREIGN KEY fk_carts_userId(userId)REFERENCES account(userId)
 );
 
+-- 创建订单表
+create table orders(
+	orderId		varchar(100) primary key,
+	buyerId 	varchar(100) not null,
+	sellerId	varchar(100) not null,
+	goodId_list	text not null,
+	status		varchar(100) default 'paid',
+	address		text not null,
+	totalPrice	double default 0,
+	constraint chk_orders_status CHECK (status in ('paid', 'send', 'finished', 'canceled')),
+	FOREIGN KEY fk_orders_buyerId(buyerId)REFERENCES account(userId),
+	FOREIGN KEY fk_orders_sellerId(sellerId)REFERENCES account(userId)
+);
 
 -- 测试用用户数据
 insert into account values('li', 1000, 'e10adc39-49ba59ab-be56e057-f20f883e'/*123456*/, null);
@@ -126,3 +139,6 @@ insert into goods(goodId, userId, price, number, goodName, description, imgs) va
 insert into carts values('li', 'a72a30b1-8ca7-4ba9-9f3f-cf97fb9d4c3c', '13');
 insert into carts values('li', 'c2f1dac4-55d4-4855-9db5-35d3fff3964d', '100');
 insert into carts values('li', '3c4903c2-2c29-4b04-b2c3-6c7efe14bdf7', '1000');
+
+-- 测试用订单数据
+insert into orders values('e0a03826-090a-45f9-bac0-10b608978b07', 'yu', 'li', '24516a9e-bf48-4d93-ae34-6f644b3be81a,d428d149-77f8-4809-b46f-a3b31844492b', 'paid', '广东省广州市', '51.1');
