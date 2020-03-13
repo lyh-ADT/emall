@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.emall.aspect.Response;
+import com.emall.good.GoodController;
 
 @Controller
 @ResponseBody
@@ -23,6 +24,7 @@ public class OrderController {
 	}
 	
 	static class Order{
+		String orderId;
 		String buyerId;
 		String sellerId;
 		String address;
@@ -32,7 +34,8 @@ public class OrderController {
 		
 		
 		static public Order newInstance(com.emall.order.Order order) {     
-			Order o = new Order();                                  
+			Order o = new Order();
+			o.setOrderId(order.getOrderId());
 			o.setBuyerId(order.getBuyerId());
 			o.setSellerId(order.getSellerId());
 			o.setAddress(order.getAddress());
@@ -41,7 +44,13 @@ public class OrderController {
 			o.setGoods(order.getGoodId_list());
 			return o;
 		}
-
+		public String getOrderId() {
+			return orderId;
+		}
+		
+		public void setOrderId(String orderId) {
+			this.orderId = orderId;
+		}
 		public String getStatus() {
 			return status;
 		}
@@ -83,7 +92,7 @@ public class OrderController {
 
 	@RequestMapping(value="/orders", method = RequestMethod.GET)
 	@ResponseBody
-	public Response getUserId(@CookieValue("UUID") String userId, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="search", defaultValue="") String search) {
+	public Response orders(@CookieValue("UUID") String userId, @RequestParam(value="page", defaultValue="1")int page, @RequestParam(value="search", defaultValue="") String search) {
 		Response r = new Response(true, null);
 		try {
 			r.setData(orderService.getPage(userId, page, search)); 
@@ -91,6 +100,29 @@ public class OrderController {
 			e.printStackTrace();
 			r.setSuccess(false);
 		}
+		return r;
+	}
+	
+	static class OrderDetail{
+		Order order;
+		List<GoodController.Good> goods;
+		public Order getOrder() {
+			return order;
+		}
+		public void setOrder(Order order) {
+			this.order = order;
+		}
+		public List<GoodController.Good> getGoods() {
+			return goods;
+		}
+		public void setGoods(List<GoodController.Good> goods) {
+			this.goods = goods;
+		}
+	}
+	@RequestMapping(value="/order-detail", method = RequestMethod.GET)
+	@ResponseBody
+	public Response getUserId(@CookieValue("UUID") String userId, @RequestParam("id")String orderId) {
+		Response r = new Response(true, orderService.getOrderDetailById(userId, orderId));
 		return r;
 	}
 }

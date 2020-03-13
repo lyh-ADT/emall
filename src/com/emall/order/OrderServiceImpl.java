@@ -6,11 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.emall.good.GoodController;
+import com.emall.good.GoodDao;
+
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private GoodDao goodDao;
 	
 	public void setUserDao(OrderDao userDao) {
 		this.orderDao = userDao;
@@ -37,5 +42,18 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		return returnList;
+	}
+
+	@Override
+	public com.emall.order.OrderController.OrderDetail getOrderDetailById(String userId, String orderId) {
+		OrderController.OrderDetail orderDetail = new OrderController.OrderDetail();
+		Order order = orderDao.getOrderById(userId, orderId);
+		orderDetail.setOrder(OrderController.Order.newInstance(order));
+		List<GoodController.Good> goods = new LinkedList<GoodController.Good>();
+		for(String goodId : order.getGoodId_list()) {
+			goods.add(GoodController.Good.newInstance(goodDao.getGoodById(goodId)));
+		}
+		orderDetail.setGoods(goods);
+		return orderDetail;
 	}
 }

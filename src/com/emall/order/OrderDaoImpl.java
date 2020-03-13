@@ -30,4 +30,11 @@ public class OrderDaoImpl implements OrderDao {
 		
 		return jdbcTemplate.query(sql, rowMapper, userId, userId, offset, ITEM_PER_PAGE);
 	}
+
+	@Override
+	public Order getOrderById(String userId, String orderId) {
+		String sql = "select * from orders where orderId=? and ? in (buyerId, sellerId);";
+		RowMapper<Order> rowMapper = new BeanPropertyRowMapper<Order>(Order.class);
+		return jdbcTemplate.query(sql, rowMapper, orderId, userId).get(0);
+	}
 }

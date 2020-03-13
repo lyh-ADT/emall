@@ -47,9 +47,9 @@
 				<button class="btn btn-danger" onclick="removeFromCheckout(this.parentElement.parentElement.parentElement.parentElement)">移除</button>
 				<div>
 					<div class="btn-group w-50" role="group">
-						<button class="btn btn-secondary" onclick="let t=$(this).next();let n=parseInt(t.val()); if(n>1)t.val(n-1);calcItemTotalPrice(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement);">-</button>
-						<input type="number" class="itemBuyNumber text-center w-50" value="1" oninput="calcItemTotalPrice(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement);">
-						<button class="btn  btn-secondary" onclick="let t=$(this).prev();let n=parseInt(t.val()); t.val(n+1);calcItemTotalPrice(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement);">+</button>
+						<button class="btn btn-secondary" disabled onclick="let t=$(this).next();let n=parseInt(t.val()); if(n>1)t.val(n-1);calcItemTotalPrice(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement);">-</button>
+						<input type="number" class="itemBuyNumber text-center w-50" readonly value="1" oninput="calcItemTotalPrice(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement);">
+						<button class="btn  btn-secondary" disabled onclick="let t=$(this).prev();let n=parseInt(t.val()); t.val(n+1);calcItemTotalPrice(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement);">+</button>
 					</div>
 					<span>价格：<span class="itemTotalPrice font-weight-bold"></span>元</span>
 				</div>

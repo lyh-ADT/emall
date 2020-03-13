@@ -34,7 +34,7 @@ public class GoodDaoImpl implements GoodDao {
 	@Override
 	public Good getGoodById(String goodId) {
 		String sql = "select * from goods where goodId=?;";
-		
-		return jdbcTemplate.queryForObject(sql, Good.class);
+		RowMapper<Good> rowMapper = new BeanPropertyRowMapper<Good>(Good.class);
+		return jdbcTemplate.query(sql, rowMapper, goodId).get(0);
 	}
 }
