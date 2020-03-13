@@ -30,4 +30,11 @@ public class GoodDaoImpl implements GoodDao {
 		
 		return jdbcTemplate.query(sql, rowMapper, like_string, offset, ITEM_PER_PAGE);
 	}
+
+	@Override
+	public Good getGoodById(String goodId) {
+		String sql = "select * from goods where goodId=?;";
+		
+		return jdbcTemplate.queryForObject(sql, Good.class);
+	}
 }
