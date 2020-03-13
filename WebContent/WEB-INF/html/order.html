@@ -1,0 +1,142 @@
+<html>
+<head>
+<meta charset="utf8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<title>订单</title>
+<style>
+.itemImg {
+	width: 200px;
+}
+</style>
+</head>
+<body class="container">
+
+	<table class="table">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">买家</th>
+				<th scope="col">卖家</th>
+				<th scope="col">地址</th>
+				<th scope="col"> </th>
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+			
+		</tbody>
+	</table>
+
+
+	<div class="d-flex justify-content-between" style="margin: 2% 0 10%;">
+		<button type="button" class="btn btn-light" style="width: 25%;"
+			onclick="previousPage();">上一页</button>
+		<button type="button" class="btn btn-primary" style="width: 50%;"
+			onclick="nextPage();">下一页</button>
+	</div>
+
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/popper.min.js"></script>
+	
+	<table style="display:none;">
+		<tbody>
+			<tr id="trItemTemplate">
+				<td class="buyerId"></td>
+				<td class="sellerId"></td>
+				<td class="address"></td>
+				<td class="detail"><a>订单详情</a></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="modal" id="modalDeleteFromCart" tabindex="-1" role="dialog">
+		<div class="modal-dialog min-vw-100" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">确认从购物车中删除吗？</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-danger comfirmDeleteFormCart">删除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function search(){
+			let text = $("#inputSearch").val();
+			getPage(1, text);
+			return false;
+		}
+	</script>
+	<script>
+		tableBody = $("#tableBody");
+		function addItemToList(item){
+			let newItem = $("#trItemTemplate").clone();
+			newItem.css("display", "");
+			newItem.attr("id", "");
+			newItem.attr("data-id", item.id);
+			newItem.find(".buyerId").text(item.buyerId);
+			newItem.find(".sellerId").text(item.sellerId);
+			newItem.find(".address").text(item.address);
+			newItem.find(".detail").find("a").attr("href", "/html/order-detail?id="+item.id);
+
+			tableBody.append(newItem);
+		}
+		
+		function getPage(page=1, search_string=""){
+			tableBody.empty();
+			let search = location.search;
+			if(search.includes("page=")){
+				search = search.replace(/page=\d+/, "page="+page);
+			}else{
+				search += "page="+page;
+			}
+			if(search.includes("search=")){
+				search = search.replace(/search=\w+/, "search="+search_string);
+			}else{
+				search += "&search="+search_string;
+			}
+			$.ajax({
+				'url':'/orders?'+search,
+				type : "GET",
+		        contentType:'application/json;charset=UTF-8',    
+				success : function(result){
+					console.log(result);
+					if(result.success){
+						for(let i of result.data){
+							addItemToList(i);
+						}
+					}else{
+						alert("请先登录");
+					}
+				}
+			});
+		}
+		
+		curPageNumber = 1;
+		getPage(curPageNumber);
+		
+		function nextPage(){
+			curPageNumber += 1;
+			getPage(curPageNumber);
+		}
+		function previousPage(){
+			if(curPageNumber > 1){
+				curPageNumber--;
+				getPage(curPageNumber);
+			}else{
+				alert("前面没有了");
+			}
+		}
+	</script>
+</body>
+</html>
