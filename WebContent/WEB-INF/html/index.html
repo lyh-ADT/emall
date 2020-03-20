@@ -47,6 +47,7 @@
 				if(result.success){
 					// ÒÑ¾­µÇÂ¼
 					$("#aUserId").text(result.data);
+					userId = result.data;
 				}else{
 					location.assign("./login.html");
 				}

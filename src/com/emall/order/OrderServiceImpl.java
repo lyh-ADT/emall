@@ -56,4 +56,38 @@ public class OrderServiceImpl implements OrderService {
 		orderDetail.setGoods(goods);
 		return orderDetail;
 	}
+
+	@Override
+	public void receive(String userId, String orderId) {
+		if(checkPermission(userId, orderId, OrderStatus.FINISHED)) {			
+			orderDao.setOrderStatus(orderId, OrderStatus.FINISHED);
+		}
+	}
+	
+	@Override
+	public void send(String userId, String orderId) {
+		if(checkPermission(userId, orderId, OrderStatus.SEND)) {			
+			orderDao.setOrderStatus(orderId, OrderStatus.SEND);
+		}
+		
+	}
+	
+	private boolean checkPermission(String userId, String orderId, String status) {
+		Order order = orderDao.getOrderById(userId, orderId);
+		if(order.getBuyerId().equals(userId)) {
+			// 买家的权限
+			switch(status) {
+			case OrderStatus.FINISHED:
+				return true;
+			}
+		}
+		if(order.getSellerId().equals(userId)) {
+			// 卖家的权限
+			switch(status) {
+			case OrderStatus.SEND:
+				return true;
+			}
+		}
+		return false;
+	}
 }

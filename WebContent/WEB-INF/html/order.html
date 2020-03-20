@@ -20,6 +20,7 @@
 				<th scope="col">卖家</th>
 				<th scope="col">地址</th>
 				<th scope="col">状态</th>
+				<th scope="col">操作</th>				
 				<th scope="col"> </th>
 			</tr>
 		</thead>
@@ -47,6 +48,10 @@
 				<td class="sellerId"></td>
 				<td class="address"></td>
 				<td class="status"></td>
+				<td class="operations">
+					<button class="btnReceive btn btn-primary" style="display:none;" onclick="receive(this.parentElement.parentElement.dataset.id)">确认收货</button>
+					<button class="btnSend btn btn-primary" style="display:none;" onclick="send(this.parentElement.parentElement.dataset.id)">发货</button>
+				</td>
 				<td class="detail"><a target="_blank">订单详情</a></td>
 			</tr>
 		</tbody>
@@ -90,13 +95,26 @@
 			let newItem = $("#trItemTemplate").clone();
 			newItem.css("display", "");
 			newItem.attr("id", "");
-			newItem.attr("data-id", item.id);
+			newItem.attr("data-id", item.orderId);
 			newItem.find(".buyerId").text(item.buyerId);
 			newItem.find(".sellerId").text(item.sellerId);
 			newItem.find(".address").text(item.address);
 			newItem.find(".status").text(STATUS[item.status]);
 			newItem.find(".detail").find("a").attr("href", "/html/order-detail.html?id="+item.orderId);
 
+			// 添加可用操作
+			let userId = parent.userId;
+			let status = newItem.find(".status");
+			if(item.buyerId == userId){ // 买家
+				if(item.status == "send"){
+					newItem.find(".operations").find(".btnReceive").css("display", "");
+				}
+			}
+			if(item.sellerId == userId){ // 卖家
+				if(item.status == "paid"){
+					newItem.find(".operations").find(".btnSend").css("display", "");
+				}
+			}
 			tableBody.append(newItem);
 		}
 		
@@ -144,6 +162,47 @@
 			}else{
 				alert("前面没有了");
 			}
+		}
+		// 确认收货
+		function receive(orderId){
+			if(comfirm("确认收货吗？")==false)return;
+			$.ajax({
+				'url':'/order/receive',
+				type : "POST",
+				dataType:"json",
+				data:JSON.stringify({
+					"id":orderId
+				}),
+		        contentType:'application/json;charset=UTF-8',    
+				success : function(result){
+					console.log(result);
+					if(result.success){
+						location.reload();
+					}else{
+						alert("请先登录");
+					}
+				}
+			});
+		}
+		// 发货
+		function send(orderId){
+			$.ajax({
+				'url':'/order/send',
+				type : "POST",
+				dataType:"json",
+				data:JSON.stringify({
+					"id":orderId
+				}),
+		        contentType:'application/json;charset=UTF-8',    
+				success : function(result){
+					console.log(result);
+					if(result.success){
+						location.reload();
+					}else{
+						alert("请先登录");
+					}
+				}
+			});
 		}
 	</script>
 </body>

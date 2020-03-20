@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -123,6 +124,33 @@ public class OrderController {
 	@ResponseBody
 	public Response getUserId(@CookieValue("UUID") String userId, @RequestParam("id")String orderId) {
 		Response r = new Response(true, orderService.getOrderDetailById(userId, orderId));
+		return r;
+	}
+	
+	static class Receive{
+		String id;
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+	}
+	@RequestMapping(value="/order/receive", method = RequestMethod.POST)
+	@ResponseBody
+	public Response receive(@CookieValue("UUID") String userId, @RequestBody Receive receive) {
+		Response r = new Response(true, null);
+		orderService.receive(userId, receive.id);
+		return r;
+	}
+	
+	@RequestMapping(value="/order/send", method = RequestMethod.POST)
+	@ResponseBody
+	public Response send(@CookieValue("UUID") String userId, @RequestBody Receive receive) {
+		Response r = new Response(true, null);
+		orderService.send(userId, receive.id);
 		return r;
 	}
 }

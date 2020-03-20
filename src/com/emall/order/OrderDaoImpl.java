@@ -37,4 +37,10 @@ public class OrderDaoImpl implements OrderDao {
 		RowMapper<Order> rowMapper = new BeanPropertyRowMapper<Order>(Order.class);
 		return jdbcTemplate.query(sql, rowMapper, orderId, userId).get(0);
 	}
+
+	@Override
+	public void setOrderStatus(String orderId, String status) {
+		String sql = "update orders set status=? where orderId=?;";
+		jdbcTemplate.update(sql, status, orderId);
+	}
 }
